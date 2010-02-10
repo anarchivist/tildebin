@@ -1,0 +1,8 @@
+h1. README
+
+* These are scripts of use to me that may be of marginal use to you. 
+* They are likely environment specific; fwiw, I'm running these either on Mac OS X 10.6 or Ubuntu.
+
+h2. Possibly incomplete list of scripts and what they do
+
+* mount-fedora-image: Mounts a copy of Mediashelf's "FedoraSolr Mac OS X DMG":http://projects.mediashelf.us/wiki/active-fedora/Blank_FedoraSolr_Disk_Image
