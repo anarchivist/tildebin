@@ -1,3 +1,4 @@
 #!/bin/bash
+# Force value of PATH to a pref file for use by textmate and other apps
 defaults write $HOME/.MacOSX/environment "PATH" "$PATH"
 plutil -convert xml1 $HOME/.MacOSX/environment.plist
