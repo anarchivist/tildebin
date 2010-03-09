@@ -1,0 +1,3 @@
+#!/bin/bash
+export FITS_DIR=/opt/fits-0.3.2
+exec $FITS_DIR/fits.sh
