@@ -1,0 +1,64 @@
+#!/usr/bin/env python
+
+# Scrape listings from Yale's off-campus housing ads & generate feeds
+
+import sys
+import time
+import urllib2
+
+from BeautifulSoup import BeautifulSoup
+from feedformatter import Feed
+
+BASE_URL = 'http://www-iisp1.its.yale.edu/offcampus/'
+SOURCE_URL = BASE_URL + 'offcampus_housing_results.asp'
+BASE_DATA = 'rb_Orderby=DateListed&cmd_Search=Search'
+
+def parse_field(field):
+    if field.find('a') is not None:
+        url = field.find('a')['href']
+        return BASE_URL + url.split('&')[0]
+    else:
+        return field.string
+        
+def row_to_dict(row):
+    item = {}
+    item['title'] = row[0] + ', ' + row[1] + ' ($' + row[5] + ')'
+    item['link'] = row[9]
+    item['guid'] = row[9]
+    item['description'] = '''<ul>
+        <li><strong>%s Term, %s Room %s</strong></li>
+        <li><strong>Handicap Accessible:</strong> %s</li>
+        <li><strong>Pets Allowed:</strong> %s</li>
+        <li><strong>Furnished:</strong> %s</li>
+        </ul>''' % (row[2], row[4], row[3], row[6], row[7], row[8])
+    item['pubDate'] = time.localtime()
+    return item
+
+def get_listings(min_rent=0, max_rent=5000):
+    postdata = 'lb_rentStart=%s&lb_rentEnd=%s&%s' % \
+        (min_rent, max_rent, BASE_DATA)
+    listings = BeautifulSoup(urllib2.urlopen(SOURCE_URL, postdata).read())
+    listing_block = listings.find('table', width='750', border='1')
+    rows = listing_block.findAll('tr')
+    # pop the first, since it's just headings
+    rows.pop(0)
+    # Return the following list for each row:
+    # [Address, City, Term, Type, Beds, Rent, Handicap, Pets, Furnished, URL]
+    return [[parse_field(f) for f in row.findAll('td')] for row in rows]
+
+def listings_to_feedobj(listing_matrix):
+    feed = Feed()
+    feed.feed['title'] = 'Yale Off-Campus Housing Listings (Unofficial Feed)'
+    feed.feed['link'] = SOURCE_URL
+    feed.feed['author'] = 'Elihu Yale'
+    feed.feed['description'] = 'Listings from Yale\'s Off-Campus Housing Site'
+    feed.items = [row_to_dict(row) for row in listing_matrix]
+    return feed
+
+if __name__ == '__main__':
+    feedobj = listings_to_feedobj(get_listings())
+    if len(sys.argv) > 1:
+        out = sys.argv[1]
+    else:
+        out = 'yale-listings.xml'
+    feedobj.format_rss2_file(out)
