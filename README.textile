@@ -6,7 +6,7 @@ h1. README
 
 h2. Possibly incomplete list of scripts and what they do
 
-* ack: Standalone version of "ack, the grep replacemetn":http://github.com/petdance/ack
+* ack: Standalone version of "ack, the grep replacement":http://github.com/petdance/ack
 * fits: Launch "FITS, the file information toolset":http://code.google.com/p/fits/
 * mount-fedora-image: Mounts a copy of Mediashelf's "FedoraSolr Mac OS X DMG":http://projects.mediashelf.us/wiki/active-fedora/Blank_FedoraSolr_Disk_Image
 * osx-force-path-to-prefs: Copies value of $PATH to a preferences file for use by Finder, Textmate, etc.
