@@ -9,4 +9,5 @@ h2. Possibly incomplete list of scripts and what they do
 * marcstats: get statistics on files containing MARC records (from "this gist":http://gist.github.com/262826 )
 * osx-force-path-to-prefs: Copies value of $PATH to a preferences file for use by Finder, Textmate, etc.
 * svn-authorsfile: generate a skeletal git-svn authorsfile from an svn commit log
+* ttfmify: create an MP3 from an M4A for "turntable.fm":http://turntable.fm
 * yale-apartments-feed: generate an RSS feed from Yale's off-campus housing ads

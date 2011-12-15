@@ -1,0 +1,26 @@
+#!/bin/bash
+# make an mp3 out of an AAC file
+
+if [ $# -ne 1 ]
+	then
+	echo "`basename $0` <m4afile> - create an MP3 from AAC/M4A and transfer metadata"
+	exit 2
+fi
+
+FAAD="`which faad`"
+LAME="`which lame`"
+
+# collect metadata
+
+TITLE="`$FAAD -i "$1" 2>&1 | grep title:\ | sed -e 's/.*title: //g'`"
+ARTIST="`$FAAD -i "$1" 2>&1 | grep artist:\ | sed -e 's/.*artist: //g'`"
+ALBUM="`$FAAD -i "$1" 2>&1 | grep album:\ | sed -e 's/.*album: //g'`"
+GENRE="`$FAAD -i "$1" 2>&1 | grep genre:\ | sed -e 's/.*genre: //g'`"
+TRACKNUM="`$FAAD -i "$1" 2>&1 | grep track:\ | sed -e 's/.*track: //g'`"
+TRACKOF="`$FAAD -i "$1" 2>&1 | grep totaltracks:\ | sed -e 's/.*totaltracks: //g'`"
+
+$FAAD -q -o - "$1" | $LAME --silent --tt "$TITLE" --ta "$ARTIST" --tl "$ALBUM" --tg "$GENRE" --tn $TRACKNUM/$TRACKOF - "/tmp/`basename "$1" .m4a`.mp3"
+
+echo "/tmp/`basename "$1" .m4a`.mp3"
+
+exit 1
